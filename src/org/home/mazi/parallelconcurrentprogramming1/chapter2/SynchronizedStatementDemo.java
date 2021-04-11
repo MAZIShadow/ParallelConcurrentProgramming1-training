@@ -1,7 +1,6 @@
 package org.home.mazi.parallelconcurrentprogramming1.chapter2;
 
-
-public class DataRaceDemo {
+public class SynchronizedStatementDemo {
 
 	private static class Shopper extends Thread {
 
@@ -9,16 +8,17 @@ public class DataRaceDemo {
 
 		@Override
 		public void run() {
-			//for (int i = 0; i < 10; i++) { <-- hard to notice
 			for (int i = 0; i < 10_000_000; i++) {
-				garlicCount++;
+				synchronized (Shopper.class) {
+					garlicCount++;
+				}
 			}
 		}
 	}
 
 	public static void main(String[] args) throws InterruptedException {
-		Thread barron = new Shopper();
-		Thread olivia = new Shopper();
+		Shopper barron = new Shopper();
+		Shopper olivia = new Shopper();
 		barron.start();
 		olivia.start();
 		barron.join();
